@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1512">
+  <title>WattWise — Energy dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#top"><span class="brand-mark">W</span><span>WattWise<small>ENERGY CONTROL</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-item active" href="#top"><span>▦</span> Overview</a>
+    <a class="nav-item" href="#readings"><span>⌁</span> Readings</a>
+    <a class="nav-item" href="#insights"><span>✳</span> Insights</a>
+    <div class="sidebar-bottom"><div class="live-dot"></div><div><b>System online</b><small>Updated just now</small></div></div>
+  </aside>
+  <main id="top">
+    <header class="topbar"><div><div class="eyebrow">MONDAY, YOUR ENERGY AT A GLANCE</div><h1>Overview</h1></div><button id="addTop" class="button primary">＋ Add reading</button></header>
+    <section class="welcome"><div><div class="eyebrow">YOUR HOME, MORE EFFICIENT</div><h2>Make every kilowatt count.</h2><p>Track your usage, understand your costs, and find simple ways to save.</p></div><div class="welcome-icon">⚡</div></section>
+    <section class="live-panel"><div class="live-head"><div class="live-title"><span class="pulse-dot"></span><div><div class="eyebrow">LIVE MONITOR <span class="demo-tag">DEMO SIMULATION</span></div><h3 id="liveState">Live demo is paused</h3></div></div><button id="liveToggle" class="button live-button">▶ Start live demo</button></div><div class="live-body"><div class="live-reading"><span id="liveWatts">0</span><small>W</small><span class="live-caption">current power draw</span></div><div class="live-wave" id="liveWave" aria-label="Simulated live power trend"></div><div class="live-session"><span>SESSION ENERGY</span><strong><span id="liveKwh">0.000</span> <small>kWh</small></strong><span class="live-caption">simulated accelerated demo</span></div><button id="saveLive" class="text-button" disabled>Save session as reading ↗</button></div><div class="live-foot">Demo values are simulated in your browser; they are not readings from a physical meter.</div></section>    <section class="metrics" aria-label="Energy summary">
+      <article class="metric"><div class="metric-top"><span>THIS MONTH</span><span class="metric-icon green">↗</span></div><div class="metric-value"><span id="monthKwh">—</span><small> kWh</small></div><div class="metric-foot"><span class="trend" id="monthTrend">From your readings</span><span>energy used</span></div></article>
+      <article class="metric"><div class="metric-top"><span>EST. MONTHLY COST</span><span class="metric-icon yellow">₹</span></div><div class="metric-value"><small>₹</small><span id="monthCost">—</span></div><div class="metric-foot"><span>Based on your tariff</span><span id="tariffLabel">₹8 / kWh</span></div></article>
+      <article class="metric"><div class="metric-top"><span>DAILY AVERAGE</span><span class="metric-icon blue">⌁</span></div><div class="metric-value"><span id="dailyAverage">—</span><small> kWh</small></div><div class="metric-foot"><span>Average per day</span><span>this month</span></div></article>
+      <article class="metric"><div class="metric-top"><span>PEAK DAY</span><span class="metric-icon coral">⚡</span></div><div class="metric-value"><span id="peakValue">—</span><small> kWh</small></div><div class="metric-foot"><span id="peakDate">Add readings to begin</span><span>highest use</span></div></article>
+    </section>
+    <section class="content-grid">
+      <article class="panel chart-panel"><div class="panel-heading"><div><div class="eyebrow">CONSUMPTION</div><h3>Energy over time</h3></div><label class="select-wrap"><span class="sr-only">Chart period</span><select id="period"><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label></div><div id="chart" class="chart" aria-label="Daily energy use chart"></div><div class="chart-legend"><span><i></i> Daily usage (kWh)</span><span id="chartTotal">—</span></div></article>
+      <article class="panel target-panel"><div class="panel-heading"><div><div class="eyebrow">YOUR DAILY TARGET</div><h3>Stay on track</h3></div><span class="target-badge">Goal</span></div><div class="target-number"><strong id="targetUsed">—</strong><span> / <span id="targetGoal">10</span> kWh</span></div><div class="progress-track"><div id="targetProgress" class="progress-fill"></div></div><p id="targetMessage">Your daily usage will appear here.</p><button id="editTarget" class="text-button">Edit daily target <span>↗</span></button><div class="target-decoration">✳</div></article>
+    </section>
+    <section class="content-grid lower-grid" id="readings">
+      <article class="panel readings-panel"><div class="panel-heading"><div><div class="eyebrow">RECENT ACTIVITY</div><h3>Recent readings</h3></div><button id="addInline" class="button secondary">＋ Add reading</button></div><div class="table-wrap"><table><thead><tr><th>DATE</th><th>USAGE</th><th>NOTE</th><th></th></tr></thead><tbody id="readingRows"></tbody></table></div><div id="emptyState" class="empty-state">No readings yet. Add one manually or load sample data.</div><div class="reading-actions"><button id="sampleButton" class="text-button">Load sample data</button><button id="clearButton" class="text-button danger">Clear all readings</button></div></article>
+      <article class="panel insights-panel" id="insights"><div class="panel-heading"><div><div class="eyebrow">SMART SUGGESTIONS</div><h3>Small changes, real savings</h3></div><span class="sparkle">✳</span></div><div id="tips"></div><div class="insight-note">Suggestions use your latest readings and are estimates.</div></article>
+    </section>
+    <footer>WattWise <span>·</span> A simple way to understand your energy use</footer>
+  </main>
+  <dialog id="readingDialog"><form id="readingForm" method="dialog"><div class="dialog-top"><div><div class="eyebrow">MANUAL ENTRY</div><h3>Add an energy reading</h3></div><button type="button" id="closeDialog" class="close-button" aria-label="Close">×</button></div><label>Date<input id="readingDate" type="date" required></label><label>Energy used <span class="unit-label">kWh</span><input id="readingKwh" type="number" min="0.01" step="0.01" placeholder="e.g. 8.5" required></label><label>Note <span class="optional">optional</span><input id="readingNote" type="text" maxlength="50" placeholder="e.g. Weekend at home"></label><p id="formError" class="form-error" role="alert"></p><div class="dialog-actions"><button type="button" id="cancelDialog" class="button secondary">Cancel</button><button class="button primary" type="submit">Save reading</button></div></form></dialog>
+  <dialog id="targetDialog"><form id="targetForm" method="dialog"><div class="dialog-top"><div><div class="eyebrow">DAILY GOAL</div><h3>Set your energy target</h3></div><button type="button" class="close-button" id="closeTarget" aria-label="Close">×</button></div><label>Daily target <span class="unit-label">kWh</span><input id="targetInput" type="number" min="0.1" step="0.1" required></label><div class="dialog-actions"><button type="button" id="cancelTarget" class="button secondary">Cancel</button><button class="button primary" type="submit">Save target</button></div></form></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>
